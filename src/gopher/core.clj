@@ -15,7 +15,7 @@
   :comm :gopher.comms.slack-rtm/start
   :token ""
   :api-token ""
-  :prefix ","})
+  :prefix "!"})
 
 (defn make-comm [id config]
   (let [f (util/kw->fn id)]
@@ -30,10 +30,11 @@
   (go-loop [[in out stop] (inst-comm)]
     (println ":: waiting for input")
     (if-let [form (<! in)]
-      (let [input (:input form)]
-;;            res (evaluator/eval-expr input)]
+      (let [input (:input form)
+            res (evaluator/eval-expr input)]
         (println ":: form >> " input)
-;;        (println ":: => " res)
+        (println ":: => " res)
+        (>! out (assoc form :evaluator/result res))
         (recur [in out stop]))
       (do
         (println ":: WARNING! The comms went down, going to restart.")

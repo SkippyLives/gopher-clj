@@ -10,7 +10,10 @@
                  [stylefruits/gniazdo "0.4.1"]
                  [clj-http "2.0.0"]
                  [clojail "1.0.6"]
-                 [cheshire "5.3.1"]]
+                 [cheshire "5.3.1"]
+                 [expectations "2.0.9"]
+                 [clojurewerkz/crawlista "1.0.0-alpha17"]]
+  :plugins [[lein-autoexpect "1.9.0"]]
   :main gopher.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

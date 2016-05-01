@@ -1,6 +1,6 @@
 # gopher
 
-FIXME: description
+using https://github.com/verma/clj-slackbot as a base and building on as i learn.
 
 ## Installation
 
