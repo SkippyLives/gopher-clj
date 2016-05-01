@@ -35,11 +35,8 @@
         (recur)))
     [in out]))
 
-(defn- can-handle? [data prefix]
-  (when-let [text (:text data)]
-    (.startsWith text prefix)))
 
-(defn start [{:keys [api-token prefix]}]
+(defn start [{:keys [api-token user]}]
   (let [cin (async/chan 10)
         cout (async/chan 10)
         url (get-websocket-url api-token)
@@ -78,8 +75,10 @@
               ;; to us, and if it is, send it to the evaluator
               (do
                 (println ":: incoming:" v)
-                (when (can-handle? v prefix)
-                  (async/>! cin {:input (subs (:text v) 1)
+                (if (and (= (:type v) "message")
+                         (not= (:user v) user)
+                         (contains? v :text))
+                  (async/>! cin {:input (:text v)
                                  :meta  v}))))
             (recur [in out])))))
     [cin cout shutdown]))

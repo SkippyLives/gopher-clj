@@ -25,12 +25,20 @@
     (go-loop [[in out stop] (inst-comm)]
       (println ":: waiting for input")
       (if-let [form (<! in)]
-        (let [input (:input form)
-            res (evaluator/eval-expr input)]
+        (let [input (:input form)]
           (println ":: form >> " input)
-          (println ":: => " res)
-          (>! out (assoc form :evaluator/result res))
-          (recur [in out stop]))
+          (if (evaluator/can-handle? input (:prefix config))
+            (do
+              (let [res (evaluator/eval-expr (subs input 1))]
+                (println ":: => " res)
+                (>! out (assoc form :evaluator/result res))))
+            (do
+              (>! out (assoc form :evaluator/result {:status true
+         :input form
+         :form form
+         :result ""
+         :output "Not a command"}))))
+         (recur [in out stop]))
         (do
           (println ":: WARNING! The comms went down, going to restart.")
           (stop)

@@ -3,6 +3,9 @@
             [clojail.testers :refer [secure-tester-without-def blanket]])
   (:import java.io.StringWriter))
 
+(defn can-handle? [data prefix]
+  (.startsWith data prefix))
+
 (def clj-slackbot-tester
   (conj secure-tester-without-def (blanket "clj-slackbot")))
 
