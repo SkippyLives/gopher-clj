@@ -1,0 +1,4 @@
+;; rename to config.edn
+{ :comm :gopher.comms.slack-rtm/start
+  :api-token "<put your token here"
+  :prefix "!" }
